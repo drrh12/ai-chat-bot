@@ -1,10 +1,11 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import Controller from './components/Controller';
+
 
 function App() {
   return (
-    <div className="App">
-      <h1>cleaned</h1>
+    <div className="">
+      <Controller />
     </div>
   );
 }
