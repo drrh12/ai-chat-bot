@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from decouple import config
 import openai
 
+from functions.database import store_messages, reset_messages
 from functions.openai_requests import convert_audio_to_text, get_chat_response
 
 app = FastAPI()
@@ -30,6 +31,12 @@ async def post_audio(file: UploadFile = File(...)):
     audio_input = open(file.filename, "rb")
 
 
+@app.get("/reset")
+async def reset_conversation():
+    reset_messages()
+    return {"response": "conversation reset"}
+
+
 @app.get("/post-audio-get")
 async def get_audio():
     audio_input = open("output.mp3", "rb")
@@ -40,6 +47,8 @@ async def get_audio():
         raise HTTPException(status_code=400, detail="Failed to decode audio")
 
     chat_response = get_chat_response(message_decoded)
+    store_messages(message_decoded, chat_response)
+
     print(chat_response)
 
     return "audio converted"

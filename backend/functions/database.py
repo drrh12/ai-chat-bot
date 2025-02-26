@@ -2,6 +2,7 @@ import os
 import json
 import random
 
+
 def get_recent_messages():
     file_name = "stored_data.json"
     learn_instruction = {
@@ -43,3 +44,28 @@ def get_recent_messages():
             json.dump([], user_file)
 
     return messages
+
+
+def store_messages(request_message, response_message):
+    file_name = "stored_data.json"
+
+    # Get recent messages
+    messages = get_recent_messages()[1:]
+
+    # Add messages to data
+    user_message = {"role": "user", "content": request_message}
+    assistant_message = {"role": "assistant", "content": response_message}
+    messages.append(user_message)
+    messages.append(assistant_message)
+
+    # Save the updated file
+    with open(file_name, "w") as f:
+        json.dump(messages, f)
+
+
+def reset_messages():
+
+    file_name = "stored_data.json"
+
+    # Write an empty file
+    open(file_name, "w")
