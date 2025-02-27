@@ -9,6 +9,7 @@ import openai
 
 from functions.database import store_messages, reset_messages
 from functions.openai_requests import convert_audio_to_text, get_chat_response
+from functions.text_to_speech import convert_text_to_speech
 
 app = FastAPI()
 
@@ -47,11 +48,22 @@ async def get_audio():
         raise HTTPException(status_code=400, detail="Failed to decode audio")
 
     chat_response = get_chat_response(message_decoded)
+    if not chat_response:
+        return HTTPException(status_code=400, detail="Failed to get chat response")
+
     store_messages(message_decoded, chat_response)
+
+    # convert chat response to audio
+    audio_output = convert_text_to_speech(chat_response)
+    if not audio_output:
+        return HTTPException(status_code=400, detail="Failed to get ElevenLabs audio")
 
     print(chat_response)
 
-    return "audio converted"
+    def iterfile():
+        yield audio_output
+
+    return StreamingResponse(iterfile(), media_type="audio/mpeg")
 
 
 @app.get("/")
