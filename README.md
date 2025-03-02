@@ -1,6 +1,6 @@
 # AI Voice Chat Application
 
-A modern, responsive voice-based chat application that allows users to communicate with an AI assistant through audio messages. This project showcases a clean, minimal UI built with React and the shadcn design system.
+A modern, responsive voice-based chat application that allows users to communicate with an AI assistant through audio messages. 
 
 ![image](https://github.com/user-attachments/assets/0902898f-bc53-4409-9606-af74ddadc980)
 
@@ -27,7 +27,7 @@ A modern, responsive voice-based chat application that allows users to communica
 
 - **Frontend**:
 
-  - React.js (v19)
+  - React.js
   - styled-components for component styling
   - Tailwind CSS for utility classes
   - Radix UI components for accessible UI primitives
@@ -37,6 +37,8 @@ A modern, responsive voice-based chat application that allows users to communica
   - Node.js API endpoint (running on `http://localhost:8000`)
   - Audio processing capabilities
   - AI response generation
+  - OpenAI API
+  - ElevenLabs API
 
 ## Architecture
 
