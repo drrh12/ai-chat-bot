@@ -38,9 +38,13 @@ async def reset_conversation():
     return {"response": "conversation reset"}
 
 
-@app.get("/post-audio-get")
-async def get_audio():
-    audio_input = open("output.mp3", "rb")
+@app.post("/post-audio-get")
+async def get_audio(file: UploadFile = File(...)):
+    with open(file.filename, "wb") as buffer:
+        buffer.write(file.file.read())
+    audio_input = open(file.filename, "rb")
+    #audio_input = open("output.mp3", "rb")
+
     message_decoded = convert_audio_to_text(audio_input)
     print(message_decoded)
 
@@ -63,7 +67,7 @@ async def get_audio():
     def iterfile():
         yield audio_output
 
-    return StreamingResponse(iterfile(), media_type="audio/mpeg")
+    return StreamingResponse(iterfile(), media_type="application/octet-stream")
 
 
 @app.get("/")
