@@ -1,12 +1,19 @@
-import { useState } from 'react';
-import Controller from './components/Controller';
+import React from "react";
+import Controller from "./components/Controller";
+import styled from "styled-components";
 
+const AppWrapper = styled.div`
+  background-color: hsl(var(--background));
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+`;
 
 function App() {
   return (
-    <div className="">
+    <AppWrapper>
       <Controller />
-    </div>
+    </AppWrapper>
   );
 }
 
