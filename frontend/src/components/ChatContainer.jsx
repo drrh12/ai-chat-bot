@@ -23,7 +23,12 @@ function ChatContainer({ messages = [] }) {
         </EmptyState>
       ) : (
         messages.map((msg, index) => (
-          <ChatMessage key={index} message={msg.text} isUser={msg.isUser} />
+          <ChatMessage
+            key={index}
+            message={msg.text}
+            isUser={msg.isUser}
+            blobUrl={msg.blobUrl}
+          />
         ))
       )}
     </Container>
@@ -35,15 +40,16 @@ const Container = styled.div`
   flex-direction: column;
   height: calc(100vh - 18rem);
   overflow-y: auto;
-  padding: 1rem;
+  padding: 1.5rem;
   background-color: hsl(var(--background));
   border-radius: var(--radius);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-  margin: 1rem 0;
+  margin: 1.5rem 0;
+  width: 100%;
 
   /* Custom scrollbar */
   &::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.6rem;
   }
 
   &::-webkit-scrollbar-track {
@@ -58,6 +64,7 @@ const Container = styled.div`
 
   @media (max-width: 768px) {
     height: calc(100vh - 16rem);
+    padding: 1rem;
   }
 `;
 
@@ -73,15 +80,15 @@ const EmptyState = styled.div`
 `;
 
 const EmptyStateIcon = styled.div`
-  font-size: 3rem;
+  font-size: 3.5rem;
   margin-bottom: 1rem;
   opacity: 0.5;
 `;
 
 const EmptyStateText = styled.p`
-  font-size: 1rem;
-  max-width: 20rem;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  max-width: 24rem;
+  line-height: 1.6;
 `;
 
 export default ChatContainer;

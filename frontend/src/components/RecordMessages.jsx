@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import RecordIcon from "./RecordIcon";
 
@@ -6,7 +6,7 @@ const RecordButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1.25rem;
   border-radius: 9999px;
   border: none;
   background-color: ${(props) =>
@@ -19,9 +19,9 @@ const RecordButton = styled.button`
       : "hsl(var(--primary-foreground))"};
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 3.5rem;
-  height: 3.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  width: 4rem;
+  height: 4rem;
 
   &:hover {
     transform: translateY(-2px);
@@ -75,22 +75,53 @@ const PulseRing = styled.div`
 
 function RecordMessages({ onRecordingComplete }) {
   const [isRecording, setIsRecording] = useState(false);
+  const [error, setError] = useState(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+
+  const startRecording = async () => {
+    audioChunksRef.current = [];
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/mp3",
+        });
+        onRecordingComplete(audioBlob);
+
+        // Stop all audio tracks
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+      setError(null);
+    } catch (err) {
+      console.error("Error accessing microphone:", err);
+      setError("Could not access microphone. Please check permissions.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
 
   const toggleRecording = () => {
-    setIsRecording(!isRecording);
-
-    // In a real implementation, here we would:
-    // 1. Start/stop recording audio
-    // 2. Process the audio
-    // 3. Call onRecordingComplete with the transcribed text or audio data
-
-    // Mock implementation for demo purposes
     if (isRecording) {
-      // Simulate recording completion
-      setTimeout(() => {
-        onRecordingComplete &&
-          onRecordingComplete("Hello, how can you help me today?");
-      }, 500);
+      stopRecording();
+    } else {
+      startRecording();
     }
   };
 
@@ -105,7 +136,7 @@ function RecordMessages({ onRecordingComplete }) {
         <RecordIcon isRecording={isRecording} />
       </RecordButton>
       <RecordStatus isRecording={isRecording}>
-        {isRecording ? "Recording..." : "Press to record"}
+        {error ? error : isRecording ? "Recording..." : ""}
       </RecordStatus>
     </RecordButtonContainer>
   );

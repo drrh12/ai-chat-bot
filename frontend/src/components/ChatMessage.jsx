@@ -9,7 +9,8 @@ const MessageContainer = styled.div`
   margin-bottom: 1rem;
   padding: 0.75rem;
   border-radius: var(--radius);
-  max-width: 90%;
+  max-width: 70%;
+  min-width: 40%;
 
   ${(props) =>
     props.isUser
@@ -52,6 +53,7 @@ const AvatarFallback = styled(AvatarPrimitive.Fallback)`
 
 const MessageContent = styled.div`
   flex: 1;
+  width: 100%;
 `;
 
 const MessageText = styled.p`
@@ -59,7 +61,14 @@ const MessageText = styled.p`
   line-height: 1.5;
 `;
 
-function ChatMessage({ message, isUser }) {
+const AudioPlayer = styled.audio`
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 40px;
+  border-radius: var(--radius);
+`;
+
+function ChatMessage({ message, isUser, blobUrl }) {
   return (
     <MessageContainer isUser={isUser}>
       <Avatar>
@@ -67,6 +76,7 @@ function ChatMessage({ message, isUser }) {
       </Avatar>
       <MessageContent>
         <MessageText>{message}</MessageText>
+        {blobUrl && <AudioPlayer controls src={blobUrl} preload="metadata" />}
       </MessageContent>
     </MessageContainer>
   );
