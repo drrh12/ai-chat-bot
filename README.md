@@ -2,7 +2,8 @@
 
 A modern, responsive voice-based chat application that allows users to communicate with an AI assistant through audio messages. This project showcases a clean, minimal UI built with React and the shadcn design system.
 
-[image: Hero screenshot of application with chat interface]
+![image](https://github.com/user-attachments/assets/0902898f-bc53-4409-9606-af74ddadc980)
+
 
 ## Features
 
@@ -12,9 +13,15 @@ A modern, responsive voice-based chat application that allows users to communica
 - **Audio Playback**: Built-in audio controls for both sent and received messages
 - **Minimal, Modern UI**: Designed with shadcn UI principles for a clean, accessible interface
 
-## Demo
+## How It Works
 
-[image: GIF showing a complete interaction - recording a message and receiving AI response]
+1. User clicks the microphone button to start recording
+2. The application uses the browser's MediaRecorder API to capture audio
+3. When recording is complete, audio is converted to a Blob and displayed in the chat
+4. The audio is sent to the backend API for processing
+5. The backend returns an AI response (also as audio)
+6. The response is displayed in the chat with playback controls
+
 
 ## Technologies Used
 
@@ -46,17 +53,6 @@ src/
 │   └── Title.jsx            # App header
 └── App.js                   # Root component
 ```
-
-[image: Architecture diagram showing frontend-backend communication flow]
-
-## How It Works
-
-1. User clicks the microphone button to start recording
-2. The application uses the browser's MediaRecorder API to capture audio
-3. When recording is complete, audio is converted to a Blob and displayed in the chat
-4. The audio is sent to the backend API for processing
-5. The backend returns an AI response (also as audio)
-6. The response is displayed in the chat with playback controls
 
 ## Setup and Installation
 
